@@ -1,29 +1,13 @@
-import PropType from "prop-types";
-
-function UserProfile(props) {
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+function UserProfile() {
+  const { userData } = useContext(UserContext);
   return (
-    <div
-      style={{
-        border: "1px solid gray",
-        padding: "10px",
-        margin: "10px",
-        borderRadius: "5px",
-      }}
-    >
-      <h2 style={{ color: "blue", fontSize: "24px" }}>{props.name}</h2>
-      <p>
-        Age:{" "}
-        <span style={{ fontWeight: "bold", color: "green" }}>{props.age}</span>
-      </p>
-      <p style={{ fontStyle: "italic", color: "#555" }}>Bio: {props.bio}</p>
+    <div>
+      <p>Name: {userData.name}</p>
+      <p>Email: {userData.email}</p>
     </div>
   );
 }
-
-UserProfile.propTypes = {
-  name: PropType.string.isRequired,
-  age: PropType.number,
-  bio: PropType.string,
-};
 
 export default UserProfile;
