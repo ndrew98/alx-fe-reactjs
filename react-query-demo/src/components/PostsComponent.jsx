@@ -11,35 +11,40 @@ const fetchPosts = async () => {
 };
 
 const PostsComponent = () => {
-  // Fetch data using useQuery with advanced configurations
-  const { data, isLoading, isError, error } = useQuery({
+  // Fetch data using useQuery
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
-
-    // Advanced configurations
-    cacheTime: 10000, // Cache data for 10 seconds
-    staleTime: 30000, // Consider data fresh for 30 seconds
-    refetchOnWindowFocus: false, // Disable automatic refetching on focus
-    keepPreviousData: true, // Keep old data while fetching new data
+    cacheTime: 10000,
+    staleTime: 30000,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
   });
-
-  // Loading state
-  if (isLoading) return <p>Loading posts...</p>;
-
-  // Error state
-  if (isError) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <h2>Posts</h2>
-      <ul>
-        {data.map((post) => (
-          <li key={post.id}>
-            <strong>{post.title}</strong>
-            <p>{post.body}</p>
-          </li>
-        ))}
-      </ul>
+
+      {/* Button to manually refetch posts */}
+      <button onClick={() => refetch()}>Refetch Posts</button>
+
+      {/* Loading state */}
+      {isLoading && <p>Loading posts...</p>}
+
+      {/* Error state */}
+      {isError && <p>Error: {error.message}</p>}
+
+      {/* Render posts if data is available */}
+      {data && (
+        <ul>
+          {data.map((post) => (
+            <li key={post.id}>
+              <strong>{post.title}</strong>
+              <p>{post.body}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
