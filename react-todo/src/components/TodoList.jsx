@@ -44,7 +44,12 @@ const TodoList = () => {
             data-testid={`todo-item-${todo.id}`}
           >
             {todo.text}
-            <button onClick={() => deleteTodo(todo.id)} data-testid={`delete-button-${todo.id}`}>Delete</button>
+            <button
+              onClick={() => deleteTodo(todo.id)}
+              data-testid={`delete-button-${todo.id}`}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
