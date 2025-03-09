@@ -13,21 +13,20 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="profile" element={<Profile />}>
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        >
           <Route path="details" element={<ProfileDetails />} />
           <Route path="settings" element={<ProfileSettings />} />
         </Route>
         <Route path="blog/:postId" element={<BlogPost />} />
         <Route path="*" element={<NotFound />} />
       </Route>
-      <Route
-        path="profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      ></Route>
     </Routes>
   );
 }
