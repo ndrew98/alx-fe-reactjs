@@ -1,36 +1,22 @@
+import "./App.css";
 import { BrowserRouter, Routes, Router, Route } from "react-router-dom";
-
-import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import ProfileDetails from "./pages/ProfileDetails";
-import ProfileSettings from "./pages/ProfileSettings";
-import BlogPost from "./pages/BlogPost";
-import NotFound from "./pages/NotFound";
-import Layout from "./components/Layout";
+import Profile from "./components/Profile";
+import ProfileDetails from "./components/ProfileDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <BrowserRouter router={Router}>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="details" element={<ProfileDetails />} />
-            <Route path="settings" element={<ProfileSettings />} />
-          </Route>
-          <Route path="blog/:postId" element={<BlogPost />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <ProtectedRoute path="/profile/:id" element={<ProfileSettings />} />
+      <BrowserRouter router={Router}>
+        <Routes>
+          <Route path="/" element={<Profile />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/profile/:id" element={<ProfileDetails />} />
+          <Route path="/profile/:id" element={<ProfileSettings />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
