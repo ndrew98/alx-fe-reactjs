@@ -1,4 +1,3 @@
-// src/components/RegistrationForm.jsx
 import React, { useState } from "react";
 
 const RegistrationForm = () => {
@@ -8,6 +7,8 @@ const RegistrationForm = () => {
     email: "",
     password: "",
   });
+
+  const [errors, setErrors] = useState(""); // Correct errors state declaration
 
   // Destructure formData for easier access
   const { username, email, password } = formData;
@@ -25,10 +26,10 @@ const RegistrationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!username || !email || !password) {
-      alert("All fields are required!");
+      setErrors("All fields are required!"); // Set errors message
       return;
     }
-    // Simulate API call
+    setErrors(""); // Clear errorss on successful submission
     console.log("Form Data Submitted:", formData);
   };
 
@@ -39,7 +40,7 @@ const RegistrationForm = () => {
         <input
           type="text"
           name="username"
-          value={username} // Directly use the destructured variable
+          value={username}
           onChange={handleChange}
         />
       </div>
@@ -48,7 +49,7 @@ const RegistrationForm = () => {
         <input
           type="email"
           name="email"
-          value={email} // Directly use the destructured variable
+          value={email}
           onChange={handleChange}
         />
       </div>
@@ -57,10 +58,12 @@ const RegistrationForm = () => {
         <input
           type="password"
           name="password"
-          value={password} // Directly use the destructured variable
+          value={password}
           onChange={handleChange}
         />
       </div>
+      {errors && <p style={{ color: "red" }}>{errors}</p>}{" "}
+      {/* Display error message */}
       <button type="submit">Register</button>
     </form>
   );
