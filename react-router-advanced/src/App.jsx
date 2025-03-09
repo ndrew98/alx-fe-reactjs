@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Router, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import ProfileDetails from "./pages/ProfileDetails";
@@ -10,24 +11,26 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route
-          path="profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="details" element={<ProfileDetails />} />
-          <Route path="settings" element={<ProfileSettings />} />
+    <BrowserRouter router={Router}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="details" element={<ProfileDetails />} />
+            <Route path="settings" element={<ProfileSettings />} />
+          </Route>
+          <Route path="blog/:postId" element={<BlogPost />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="blog/:postId" element={<BlogPost />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
