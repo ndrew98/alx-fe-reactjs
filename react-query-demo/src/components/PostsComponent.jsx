@@ -11,10 +11,16 @@ const fetchPosts = async () => {
 };
 
 const PostsComponent = () => {
-  // Fetch data using useQuery
+  // Fetch data using useQuery with advanced configurations
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["posts"], // Unique key for caching
-    queryFn: fetchPosts, // Function that fetches data
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+
+    // Advanced configurations
+    cacheTime: 10000, // Cache data for 10 seconds
+    staleTime: 30000, // Consider data fresh for 30 seconds
+    refetchOnWindowFocus: false, // Disable automatic refetching on focus
+    keepPreviousData: true, // Keep old data while fetching new data
   });
 
   // Loading state
