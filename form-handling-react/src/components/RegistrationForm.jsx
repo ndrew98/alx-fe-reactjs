@@ -1,24 +1,18 @@
-import React from "react";
-import { useState } from "react";
+// src/components/RegistrationForm.jsx
+import React, { useState } from "react";
 
 const RegistrationForm = () => {
+  // State to manage form data
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Validate form data
-    if (!formData.username || !formData.email || !formData.password) {
-      alert("Please fill all the fields");
-      return;
-    }
-    // Simulate API call
-    console.log("Form Data Submitted:", formData);
-  };
+  // Destructure formData for easier access
+  const { username, email, password } = formData;
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -27,39 +21,48 @@ const RegistrationForm = () => {
     });
   };
 
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!username || !email || !password) {
+      alert("All fields are required!");
+      return;
+    }
+    // Simulate API call
+    console.log("Form Data Submitted:", formData);
+  };
+
   return (
-    <div>
-      <form action="" autoComplete="off" onSubmit={handleSubmit}>
-        <label htmlFor="username">Username</label>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Username:</label>
         <input
           type="text"
           name="username"
-          id="username"
-          value={formData.username}
-          placeholder="username"
+          value={username} // Directly use the destructured variable
           onChange={handleChange}
         />
-        <label htmlFor="email">Email</label>
+      </div>
+      <div>
+        <label>Email:</label>
         <input
           type="email"
           name="email"
-          id="email"
-          value={formData.email}
-          placeholder="email"
+          value={email} // Directly use the destructured variable
           onChange={handleChange}
         />
-        <label htmlFor="password">Password</label>
+      </div>
+      <div>
+        <label>Password:</label>
         <input
           type="password"
           name="password"
-          id="password"
-          value={formData.password}
-          placeholder="password"
+          value={password} // Directly use the destructured variable
           onChange={handleChange}
         />
-        <button type="submit">Register</button>
-      </form>
-    </div>
+      </div>
+      <button type="submit">Register</button>
+    </form>
   );
 };
 
