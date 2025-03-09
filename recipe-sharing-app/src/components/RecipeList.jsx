@@ -8,11 +8,18 @@ const RecipeList = () => {
   return (
     <div>
       {filteredRecipes.map((recipe) => (
-        <div key={recipe.id}>
-          <h3>
-            <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
-          </h3>
-          <p>{recipe.description}</p>
+        <div key={recipe.id} className="card mb-3">
+          <div className="card-body">
+            <h3 className="card-title">
+              <Link
+                to={`/recipe/${recipe.id}`}
+                className="text-decoration-none"
+              >
+                {recipe.title}
+              </Link>
+            </h3>
+            <p className="card-text">{recipe.description}</p>
+          </div>
         </div>
       ))}
     </div>

@@ -22,18 +22,23 @@ const RecipeDetails = ({ recipeId }) => {
   };
 
   if (!recipe) {
-    return <div>Recipe not found</div>;
+    return <div className="alert alert-danger">Recipe not found</div>;
   }
 
   return (
-    <div>
-      <h1>{recipe.title}</h1>
-      <p>{recipe.description}</p>
-      <button onClick={handleFavoriteClick}>
-        {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-      </button>
-      <EditRecipeForm recipe={recipe} />
-      <DeleteRecipeButton recipeId={recipe.id} />
+    <div className="card">
+      <div className="card-body">
+        <h1 className="card-title">{recipe.title}</h1>
+        <p className="card-text">{recipe.description}</p>
+        <button
+          className={`btn ${isFavorite ? "btn-danger" : "btn-primary"} me-2`}
+          onClick={handleFavoriteClick}
+        >
+          {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+        </button>
+        <EditRecipeForm recipe={recipe} />
+        <DeleteRecipeButton recipeId={recipe.id} />
+      </div>
     </div>
   );
 };

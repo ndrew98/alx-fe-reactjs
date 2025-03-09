@@ -13,6 +13,7 @@ const SearchBar = () => {
   return (
     <input
       type="text"
+      className="form-control mb-4"
       placeholder="Search recipes..."
       onChange={(e) => setSearchTerm(e.target.value)}
     />
