@@ -1,12 +1,49 @@
-# React + Vite
+# GitHub User Search Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+A React-powered web application that allows users to search and explore GitHub profiles with advanced search capabilities.
 
-Currently, two official plugins are available:
+## Features
+- Advanced GitHub user search
+- Filter users by username, location, and repository count
+- Responsive and modern UI
+- Pagination of search results
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- React
+- Vite
+- Axios
+- Tailwind CSS
+- GitHub API
 
-## Expanding the ESLint configuration
+## Local Development Setup
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+- Node.js (v18 or later)
+- npm
+
+### Installation
+1. Clone the repository
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Run the development server
+```bash
+npm run dev
+```
+
+## Deployment
+Deployed on Vercel: [Live Demo URL]
+
+## Environment Variables
+- `VITE_GITHUB_API_BASE_URL`: GitHub API base URL (default: https://api.github.com)
+
+## Performance Optimization
+- Implemented lazy loading
+- Minimal bundle size
+- Efficient API calls
+
+## Future Improvements
+- Add dark mode for better accessibility

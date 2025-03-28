@@ -1,31 +1,65 @@
 import axios from "axios";
 
-// Base URL for GitHub API
 const GITHUB_API_BASE_URL = "https://api.github.com";
 
 export const githubService = {
   /**
-   * Fetches user data from GitHub API
-   * @param {string} username - GitHub username to search
-   * @returns {Promise} Promise resolving to user data
-   * @throws {Error} Throws error if user not found or API call fails
+   * Advanced search for GitHub users
+   * @param {Object} searchParams - Search parameters
+   * @returns {Promise} Search results from GitHub API
    */
-  async fetchUserData(username) {
+  async searchUsers(searchParams) {
     try {
-      // Make GET request to GitHub API user endpoint
+      // Construct query string based on provided parameters
+      const queryParts = [];
+
+      // Username or name
+      if (searchParams.username) {
+        queryParts.push(searchParams.username);
+      }
+
+      // Location filter
+      if (searchParams.location) {
+        queryParts.push(`location:${searchParams.location}`);
+      }
+
+      // Repositories count filter
+      if (searchParams.minRepos) {
+        queryParts.push(`repos:>=${searchParams.minRepos}`);
+      }
+
+      // Construct full query
+      const query = queryParts.join(" ");
+
+      // Make API request
+      const response = await axios.get(`${GITHUB_API_BASE_URL}/search/users`, {
+        params: {
+          q: query,
+          page: searchParams.page || 1,
+          per_page: searchParams.perPage || 10,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error searching GitHub users:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Fetch detailed user information
+   * @param {string} username - GitHub username
+   * @returns {Promise} Detailed user data
+   */
+  async fetchUserDetails(username) {
+    try {
       const response = await axios.get(
         `${GITHUB_API_BASE_URL}/users/${username}`
       );
-
-      // Return the user data
       return response.data;
     } catch (error) {
-      // Handle specific 404 error (user not found)
-      if (error.response && error.response.status === 404) {
-        throw new Error("User not found");
-      }
-
-      // Rethrow other types of errors
+      console.error(`Error fetching details for user ${username}:`, error);
       throw error;
     }
   },

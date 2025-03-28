@@ -1,114 +1,214 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { githubService } from "../services/githubService";
 
-const Search = () => {
-  // State variables to manage component's data and UI state
-  // username: stores the current input value
-  // userData: stores the fetched user data
-  // loading: indicates if API call is in progress
-  // error: stores any error messages from API call
-  const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState(null);
+function Search() {
+  // State for search parameters
+  const [searchParams, setSearchParams] = useState({
+    username: "",
+    location: "",
+    minRepos: "",
+  });
+
+  // State for search results
+  const [searchResults, setSearchResults] = useState({
+    items: [],
+    totalCount: 0,
+  });
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Handler for form submission
-  const handleSearch = async (e) => {
-    // Prevent default form submission behavior
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchParams((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //on submit , reset previous search state
-    //clear any previous user data, errors and prepare for a new search
-    setUserData(null);
+    // Reset previous search state
+    setSearchResults({ items: [], totalCount: 0 });
     setError(null);
+    setCurrentPage(1);
 
-    //set loading to true to indicate that API call is in progress or a search is in progress
+    // Validate at least one search parameter is provided
+    if (
+      !searchParams.username &&
+      !searchParams.location &&
+      !searchParams.minRepos
+    ) {
+      setError("Please provide at least one search parameter");
+      return;
+    }
+
+    // Set loading state
     setLoading(true);
 
     try {
-      //Attempt to fetch user data using the githubService
-      // Passes the username entered by the user
-      const data = await githubService.fetchUserData(username);
+      // Perform advanced search
+      const results = await githubService.searchUsers({
+        ...searchParams,
+        page: currentPage,
+        perPage: 10,
+      });
 
-      // If data is successfully fetched, update userData
-      setUserData(data);
-      // Set loading to false as data retrieval is complete
-      setLoading(false);
+      // Set search results
+      setSearchResults({
+        items: results.items,
+        totalCount: results.total_count,
+      });
     } catch (err) {
-      // If an error occurs during fetch
-      // Set error message
-      setError(err.message);
-      // Set loading to false
+      // Handle errors
+      setError(err.message || "An error occurred while searching");
+    } finally {
+      // Reset loading state
       setLoading(false);
     }
   };
-  //Handle for form submission
-  return (
-    <div className="search-container">
-      <form className="search-form" onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Search for a GitHub user"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
 
-        <button type="submit" className="search-button">
-          Search
+  // Handle pagination
+  const handleLoadMore = async () => {
+    const nextPage = currentPage + 1;
+    setLoading(true);
+
+    try {
+      const results = await githubService.searchUsers({
+        ...searchParams,
+        page: nextPage,
+        perPage: 10,
+      });
+
+      setSearchResults((prev) => ({
+        items: [...prev.items, ...results.items],
+        totalCount: results.total_count,
+      }));
+      setCurrentPage(nextPage);
+    } catch (err) {
+      setError("Failed to load more results");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      {/* Advanced Search Form */}
+      <form onSubmit={handleSubmit} className="space-y-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Username Input */}
+          <input
+            type="text"
+            name="username"
+            value={searchParams.username}
+            onChange={handleInputChange}
+            placeholder="Username"
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          {/* Location Input */}
+          <input
+            type="text"
+            name="location"
+            value={searchParams.location}
+            onChange={handleInputChange}
+            placeholder="Location"
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          {/* Minimum Repositories Input */}
+          <input
+            type="number"
+            name="minRepos"
+            value={searchParams.minRepos}
+            onChange={handleInputChange}
+            placeholder="Min Repositories"
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            min="0"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors"
+        >
+          {loading ? "Searching..." : "Search"}
         </button>
       </form>
 
-      {/* Conditional rendering for different states */}
-
-      {/* Loading state - shown while fetching data */}
-      {loading && <p className="loading-message">Loading...</p>}
-
-      {/* Error state - shown if user not found or API call fails */}
+      {/* Error Handling */}
       {error && (
-        <p className="error-message">Looks like we cant find the user</p>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
       )}
 
-      {/* Success state - display user information when data is retrieved */}
-      {userData && (
-        <div className="user-card">
-          {/* User Avatar */}
-          <img
-            src={userData.avatar_url}
-            alt={`${userData.name}'s avatar`}
-            className="user-avatar"
-          />
+      {/* Search Results */}
+      {searchResults.totalCount > 0 && (
+        <div>
+          <h2 className="text-xl font-bold mb-4">
+            {searchResults.totalCount} Users Found
+          </h2>
 
-          {/* User Information Container */}
-          <div className="user-info">
-            {/* Display name (or username if name is not available) */}
-            <h2>{userData.name || userData.login}</h2>
+          <div className="grid gap-4">
+            {searchResults.items.map((user) => (
+              <div
+                key={user.id}
+                className="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm"
+              >
+                {/* User Avatar */}
+                <img
+                  src={user.avatar_url}
+                  alt={`${user.login}'s avatar`}
+                  className="w-16 h-16 rounded-full mr-4 object-cover"
+                />
 
-            {/* User bio (or default message if no bio) */}
-            <p>{userData.bio || "No bio available"}</p>
+                <div className="flex-grow">
+                  {/* Username */}
+                  <h3 className="font-bold text-lg">{user.login}</h3>
 
-            {/* User Statistics */}
-            <div className="user-stats">
-              <span>Followers: {userData.followers}</span>
-              <span>Following: {userData.following}</span>
-              <span>Public Repos: {userData.public_repos}</span>
-            </div>
-
-            {/* Link to GitHub Profile */}
-            <a
-              href={userData.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="github-profile-link"
-            >
-              View GitHub Profile
-            </a>
+                  {/* Profile Link */}
+                  <a
+                    href={user.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    View Profile
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
+
+          {/* Load More Button */}
+          {searchResults.items.length < searchResults.totalCount && (
+            <button
+              onClick={handleLoadMore}
+              disabled={loading}
+              className="w-full mt-4 bg-green-500 text-white p-2 rounded-md hover:bg-green-600 disabled:opacity-50"
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* No Results Message */}
+      {searchResults.totalCount === 0 && !loading && (
+        <div className="text-center text-gray-600">
+          No users found. Try different search parameters.
         </div>
       )}
     </div>
   );
-};
+}
 
 export default Search;
