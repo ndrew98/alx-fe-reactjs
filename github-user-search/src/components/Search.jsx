@@ -67,7 +67,7 @@ const Search = () => {
 
       {/* Error state - shown if user not found or API call fails */}
       {error && (
-        <p className="error-message">Looks like we can't find the user</p>
+        <p className="error-message">Looks like we cant find the user</p>
       )}
 
       {/* Success state - display user information when data is retrieved */}
