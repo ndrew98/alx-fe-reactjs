@@ -32,13 +32,16 @@ export const githubService = {
       const query = queryParts.join(" ");
 
       // Make API request
-      const response = await axios.get(`${GITHUB_API_BASE_URL}/search/users`, {
-        params: {
-          q: query,
-          page: searchParams.page || 1,
-          per_page: searchParams.perPage || 10,
-        },
-      });
+      const response = await axios.get(
+        `${GITHUB_API_BASE_URL}/search/users?q`,
+        {
+          params: {
+            q: query,
+            page: searchParams.page || 1,
+            per_page: searchParams.perPage || 10,
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {
