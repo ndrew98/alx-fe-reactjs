@@ -6,4 +6,5 @@ export default defineConfig({
   css: {
     postcss: "./postcss.config.js",
   },
+  base: process.env.VITE_BASE_PATH || "/github-user-search",
 });
