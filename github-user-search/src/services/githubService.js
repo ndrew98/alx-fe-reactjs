@@ -33,7 +33,7 @@ export const githubService = {
 
       // Make API request
       const response = await axios.get(
-        `${GITHUB_API_BASE_URL}/search/users?q`,
+        `https://api.github.com/search/users?q`,
         {
           params: {
             q: query,
