@@ -207,7 +207,7 @@ function Search() {
       {/* No Results Message */}
       {searchResults.totalCount === 0 && !loading && (
         <div className="text-center text-gray-600">
-          No users found. Try different search parameters.
+          Looks like we cant find the user
         </div>
       )}
     </div>
