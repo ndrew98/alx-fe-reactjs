@@ -56,7 +56,7 @@ function Search() {
 
     try {
       // Perform advanced search
-      const results = await githubService.searchUsers({
+      const results = await githubService.fetchUserData({
         ...searchParams,
         page: currentPage,
         perPage: 10,
@@ -82,7 +82,7 @@ function Search() {
     setLoading(true);
 
     try {
-      const results = await githubService.searchUsers({
+      const results = await githubService.fetchUserData({
         ...searchParams,
         page: nextPage,
         perPage: 10,

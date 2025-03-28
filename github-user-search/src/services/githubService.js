@@ -8,7 +8,7 @@ export const githubService = {
    * @param {Object} searchParams - Search parameters
    * @returns {Promise} Search results from GitHub API
    */
-  async searchUsers(searchParams) {
+  async fetchUserData(searchParams) {
     try {
       // Construct query string based on provided parameters
       const queryParts = [];
@@ -52,7 +52,7 @@ export const githubService = {
    * @param {string} username - GitHub username
    * @returns {Promise} Detailed user data
    */
-  async fetchUserData(username) {
+  async fetchUserDetails(username) {
     try {
       const response = await axios.get(
         `${GITHUB_API_BASE_URL}/users/${username}`
