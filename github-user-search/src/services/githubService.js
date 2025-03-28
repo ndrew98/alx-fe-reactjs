@@ -52,7 +52,7 @@ export const githubService = {
    * @param {string} username - GitHub username
    * @returns {Promise} Detailed user data
    */
-  async fetchUserDetails(username) {
+  async fetchUserData(username) {
     try {
       const response = await axios.get(
         `${GITHUB_API_BASE_URL}/users/${username}`
